@@ -1,0 +1,557 @@
+{
+	"info": {
+		"_postman_id": "988098b5-6c12-4f16-bae2-76ec85b60dbc",
+		"name": "Coutry Info Service SOAP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45616154",
+		"_collection_link": "https://www.postman.com/anastasiakostiuk-3898973/workspace/anastasia-kostiuk-s-workspace/collection/45616154-988098b5-6c12-4f16-bae2-76ec85b60dbc?action=share&source=collection_link&creator=45616154"
+	},
+	"item": [
+		{
+			"name": "200 List Of Continents By Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:ListOfContinentsByName></web:ListOfContinentsByName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 500 List Of Continents By Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:ListOfContinentsByName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 List Of Currencies By Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:ListOfCurrenciesByName></web:ListOfCurrenciesByName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 List Of Country Names By Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:ListOfCountryNamesByName></web:ListOfCountryNamesByName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 Country Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:CountryName>\n            <web:sCountryISOCode>RU</web:sCountryISOCode>\n        </web:CountryName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 200 Country Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:CountryName>\n            <web:sCountryISOCode></web:sCountryISOCode>\n        </web:CountryName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 500 Country Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:CountryName>\n            <web:sCountryISOCode><web:sCountryISOCode>\n        </web:CountryName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 Country ISO Code",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:CountryISOCode>\n            <web:sCountryName>Russia</web:sCountryName>\n        </web:CountryISOCode>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 200 Country ISO Code Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:CountryISOCode>\n            <web:sCountryName></web:sCountryName>\n        </web:CountryISOCode>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 Full Country Info",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:FullCountryInfo>\n            <web:sCountryISOCode>RU</web:sCountryISOCode>\n        </web:FullCountryInfo>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 200 Full Country Info",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:FullCountryInfo>\n            <web:sCountryISOCode>ABC</web:sCountryISOCode>\n        </web:FullCountryInfo>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 Language Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:LanguageName>\n            <web:sISOCode>Russia</web:sISOCode>\n        </web:LanguageName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEG 200 Language Name",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:web=\"http://www.oorsprong.org/websamples.countryinfo\">\n    <x:Header/>\n    <x:Body>\n        <web:LanguageName>\n            <web:sISOCode>Россия</web:sISOCode>\n        </web:LanguageName>\n    </x:Body>\n</x:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"oorsprong",
+						"org"
+					],
+					"path": [
+						"websamples.countryinfo",
+						"CountryInfoService.wso"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,2637 @@
+{
+	"info": {
+		"_postman_id": "254059d6-67a7-4b5f-9307-e69d7f07d659",
+		"name": "DemoShopping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45616154",
+		"_collection_link": "https://www.postman.com/anastasiakostiuk-3898973/workspace/anastasia-kostiuk-s-workspace/collection/45616154-254059d6-67a7-4b5f-9307-e69d7f07d659?action=share&source=collection_link&creator=45616154"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "200 All Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									"pm.test(\"Проверка структуры всех продуктов\", function () {",
+									"    const jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData).to.be.an(\"array\").that.is.not.empty;",
+									"",
+									"    jsonData.forEach((product, index) => {",
+									"        pm.expect(product).to.have.property(\"product_id\").that.is.a(\"number\");",
+									"        pm.expect(product).to.have.property(\"name\").that.is.a(\"string\");",
+									"        pm.expect(product).to.have.property(\"description\").that.is.a(\"string\");",
+									"        pm.expect(product).to.have.property(\"price\").that.is.a(\"number\");",
+									"        pm.expect(product).to.have.property(\"category\").that.is.a(\"string\");",
+									"        pm.expect(product).to.have.property(\"manufacturer\").that.is.a(\"string\");",
+									"        pm.expect(product).to.have.property(\"imageUrl\").that.is.a(\"string\");",
+									"        pm.expect(product).to.have.property(\"freeShipping\").that.is.a(\"boolean\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{key}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Add new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									"let responseText = pm.response.text();",
+									"",
+									"// Ищем ID в тексте (цифры после \"ID:\" с возможными пробелами и разными разделителями)",
+									"let match = responseText.match(/ID\\s*[:\\-–]?\\s*(\\d+)/i);",
+									"",
+									"if (match && match[1]) {",
+									"    let productId = parseInt(match[1], 10);",
+									"    pm.environment.set(\"productId\", productId);",
+									"    console.log(\"✅ Сохранён productId:\", productId);",
+									"",
+									"    pm.test(\"Ответ содержит ID продукта\", function () {",
+									"        pm.expect(productId).to.be.a(\"number\");",
+									"    });",
+									"} else {",
+									"    pm.test(\"❌ Не удалось найти ID продукта в ответе\", function () {",
+									"        pm.expect.fail(\"ID продукта не найден в тексте ответа\");",
+									"    });",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const categories = [\"Laptops\", \"Phones\", \"Watches\"];",
+									"const manufacturers = [\"Xiaomi\", \"Samsung\", \"Apple\", \"Huawei\"];",
+									"",
+									"pm.environment.set(\"randomProductName\", `Product ${Math.floor(Math.random() * 10000)}`);",
+									"pm.environment.set(\"randomDescription\", \"Auto-generated product for testing purposes.\");",
+									"pm.environment.set(\"randomPrice\", (Math.random() * 1000).toFixed(2));",
+									"pm.environment.set(\"randomCategory\", categories[Math.floor(Math.random() * categories.length)]);",
+									"pm.environment.set(\"randomManufacturer\", manufacturers[Math.floor(Math.random() * manufacturers.length)]);",
+									"pm.environment.set(\"randomImageUrl\", `https://example.com/images/${Math.floor(Math.random() * 1000)}.jpg`);",
+									"pm.environment.set(\"randomFreeShipping\", Math.random() < 0.5);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n  \"name\": \"{{randomProductName}}\",\n  \"description\": \"{{randomDescription}}\",\n  \"price\": {{randomPrice}},\n  \"category\": \"{{randomCategory}}\",\n  \"manufacturer\": \"{{randomManufacturer}}\",\n  \"imageUrl\": \"{{randomImageUrl}}\",\n  \"freeShipping\": {{randomFreeShipping}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/add-product",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Add new product Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									"let responseText = pm.response.text();",
+									"",
+									"// Ищем ID в тексте (цифры после \"ID:\" с возможными пробелами и разными разделителями)",
+									"let match = responseText.match(/ID\\s*[:\\-–]?\\s*(\\d+)/i);",
+									"",
+									"if (match && match[1]) {",
+									"    let productId = parseInt(match[1], 10);",
+									"    pm.environment.set(\"productId\", productId);",
+									"    console.log(\"✅ Сохранён productId:\", productId);",
+									"",
+									"    pm.test(\"Ответ содержит ID продукта\", function () {",
+									"        pm.expect(productId).to.be.a(\"number\");",
+									"    });",
+									"} else {",
+									"    pm.test(\"❌ Не удалось найти ID продукта в ответе\", function () {",
+									"        pm.expect.fail(\"ID продукта не найден в тексте ответа\");",
+									"    });",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Example Product\",\n  \"description\": \"This is an example product.\",\n  \"price\": 100,\n  \"category\": \"Electronics\",\n  \"manufacturer\": \"Example Manufacturer\",\n  \"imageUrl\": \"http://example.com/image.jpg\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/add-product",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Add new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Example Product\",\n  \"description\": \"This is an example product.\",\n  \"price\": \"string\",\n  \"category\": \"Electronics\",\n  \"manufacturer\": \"Example Manufacturer\",\n  \"imageUrl\": \"http://example.com/image.jpg\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/add-product",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"",
+									"",
+									"pm.test(\"Статус-код 200\", function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Время ответа < 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									"let jsonData = pm.response.json();",
+									"pm.test(\"Объект содержит все ожидаемые поля\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"product_id\").that.is.a(\"number\");",
+									"    pm.expect(jsonData).to.have.property(\"name\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"description\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"price\").that.is.a(\"number\");",
+									"    pm.expect(jsonData).to.have.property(\"category\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"manufacturer\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"imageUrl\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"freeShipping\").that.is.a(\"boolean\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/id/100000",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"100000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Update entire product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"",
+									"",
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.expect(pm.response.code).to.eql(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Время ответа < 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Darkhold\",\n  \"description\": \"The book of the damned\",\n  \"price\": 1000,\n  \"category\": \"Laptops\",\n  \"manufacturer\": \"Scarlet Witch\",\n  \"imageUrl\": \"string\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Update entire product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"price\": \"string\",\n  \"category\": \"string\",\n  \"manufacturer\": \"string\",\n  \"imageUrl\": \"string\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Update entire product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"price\": 100,\n  \"category\": \"string\",\n  \"manufacturer\": \"string\",\n  \"imageUrl\": \"string\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/100000",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"100000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Partial product update by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"",
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"price\": 10,\n  \"category\": \"string\",\n  \"manufacturer\": \"string\",\n  \"imageUrl\": \"string\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Partial product update by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"price\": \"string\",\n  \"category\": \"string\",\n  \"manufacturer\": \"string\",\n  \"imageUrl\": \"string\",\n  \"freeShipping\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Partial product update by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n  \"price\": 0\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/id/:productid",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								":productid"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Статус-код 404 OK\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Время ответа не более 1000 мс\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/products/id/1000000",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"1000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByCategory?category={{Category}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByCategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "{{Category}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByCategory?category=abc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByCategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "abc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by Manufacturer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByManufacturer?manufacturer=Apple",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByManufacturer"
+							],
+							"query": [
+								{
+									"key": "manufacturer",
+									"value": "Apple"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product by Manufacturer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByManufacturer?manufacturer=abc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByManufacturer"
+							],
+							"query": [
+								{
+									"key": "manufacturer",
+									"value": "abc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by Shipping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByShipping?freeShipping={{freeShipping}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByShipping"
+							],
+							"query": [
+								{
+									"key": "freeShipping",
+									"value": "{{freeShipping}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product by Shipping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/FindByShipping?freeShipping=",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"FindByShipping"
+							],
+							"query": [
+								{
+									"key": "freeShipping",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product by filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/filter?category={{Category}}&manufacturer={{Manufacturer}}&freeShipping={{freeShipping}}&minPrice&maxPrice",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "{{Category}}"
+								},
+								{
+									"key": "manufacturer",
+									"value": "{{Manufacturer}}"
+								},
+								{
+									"key": "freeShipping",
+									"value": "{{freeShipping}}"
+								},
+								{
+									"key": "minPrice",
+									"value": null
+								},
+								{
+									"key": "maxPrice",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Product by filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/products/filter?category=10&manufacturer=&freeShipping&minPrice=abc&maxPrice",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"products",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "10"
+								},
+								{
+									"key": "manufacturer",
+									"value": ""
+								},
+								{
+									"key": "freeShipping",
+									"value": null
+								},
+								{
+									"key": "minPrice",
+									"value": "abc"
+								},
+								{
+									"key": "maxPrice",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{key}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "200 Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"0000000Q\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Registeration",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(min, max) {",
+									"    return Math.floor(Math.random() * (max - min + 1)) + min;",
+									"}",
+									"",
+									"// Генерация случайного имени пользователя (3-15 символов, латиница, цифры, _)",
+									"function generateUsername() {",
+									"    const chars = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\";",
+									"    const length = getRandomInt(3, 15);",
+									"    let username = \"\";",
+									"    for (let i = 0; i < length; i++) {",
+									"        username += chars.charAt(Math.floor(Math.random() * chars.length));",
+									"    }",
+									"    return username;",
+									"}",
+									"",
+									"// Генерация пароля (минимум 8 символов, минимум одна латинская буква и одна цифра)",
+									"function generatePassword() {",
+									"    const letters = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";",
+									"    const digits = \"0123456789\";",
+									"    const allChars = letters + digits;",
+									"",
+									"    let password = \"\";",
+									"    // Гарантируем хотя бы одну букву",
+									"    password += letters.charAt(Math.floor(Math.random() * letters.length));",
+									"    // Гарантируем хотя бы одну цифру",
+									"    password += digits.charAt(Math.floor(Math.random() * digits.length));",
+									"",
+									"    const length = getRandomInt(6, 14); // Чтобы итог был минимум 8 символов",
+									"    for (let i = 0; i < length; i++) {",
+									"        password += allChars.charAt(Math.floor(Math.random() * allChars.length));",
+									"    }",
+									"",
+									"    // Перемешиваем пароль",
+									"    password = password.split('').sort(() => 0.5 - Math.random()).join('');",
+									"    return password;",
+									"}",
+									"",
+									"const randomUsername = generateUsername();",
+									"const randomPassword = generatePassword();",
+									"",
+									"pm.environment.set(\"randomUsername\", randomUsername);",
+									"pm.environment.set(\"randomPassword\", randomPassword);",
+									"",
+									"console.log(\"Generated randomUsername:\", randomUsername);",
+									"console.log(\"Generated randomPassword:\", randomPassword);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{randomUsername}}\",\n  \"password\": \"{{randomPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Registeration",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateUsername() {",
+									"    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_';",
+									"    const minLength = 3;",
+									"    const maxLength = 15;",
+									"    const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;",
+									"    ",
+									"    let username = '';",
+									"    for (let i = 0; i < length; i++) {",
+									"        username += chars.charAt(Math.floor(Math.random() * chars.length));",
+									"    }",
+									"    return username;",
+									"}",
+									"",
+									"pm.environment.set(\"randomUsername\", generateUsername());",
+									"",
+									"",
+									"function generatePassword() {",
+									"    const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';",
+									"    const digits = '0123456789';",
+									"    const allChars = letters + digits;",
+									"",
+									"    const minLength = 8;",
+									"    const maxLength = 16;",
+									"    const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;",
+									"",
+									"    let password = '';",
+									"",
+									"    // Обязательно одна буква и одна цифра",
+									"    password += letters.charAt(Math.floor(Math.random() * letters.length));",
+									"    password += digits.charAt(Math.floor(Math.random() * digits.length));",
+									"",
+									"    // Остальные символы случайные",
+									"    for (let i = 2; i < length; i++) {",
+									"        password += allChars.charAt(Math.floor(Math.random() * allChars.length));",
+									"    }",
+									"",
+									"    // Перемешиваем символы",
+									"    password = password.split('').sort(() => 0.5 - Math.random()).join('');",
+									"",
+									"    return password;",
+									"}",
+									"",
+									"pm.environment.set(\"randomPassword\", generatePassword());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Add user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(min, max) {",
+									"    return Math.floor(Math.random() * (max - min + 1)) + min;",
+									"}",
+									"",
+									"// Генерация случайного имени пользователя (3-15 символов, латиница, цифры, _)",
+									"function generateUsername() {",
+									"    const chars = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\";",
+									"    const length = getRandomInt(3, 15);",
+									"    let username = \"\";",
+									"    for (let i = 0; i < length; i++) {",
+									"        username += chars.charAt(Math.floor(Math.random() * chars.length));",
+									"    }",
+									"    return username;",
+									"}",
+									"",
+									"// Генерация пароля (минимум 8 символов, минимум одна латинская буква и одна цифра)",
+									"function generatePassword() {",
+									"    const letters = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";",
+									"    const digits = \"0123456789\";",
+									"    const allChars = letters + digits;",
+									"",
+									"    let password = \"\";",
+									"    // Гарантируем хотя бы одну букву",
+									"    password += letters.charAt(Math.floor(Math.random() * letters.length));",
+									"    // Гарантируем хотя бы одну цифру",
+									"    password += digits.charAt(Math.floor(Math.random() * digits.length));",
+									"",
+									"    const length = getRandomInt(6, 14); // Чтобы итог был минимум 8 символов",
+									"    for (let i = 0; i < length; i++) {",
+									"        password += allChars.charAt(Math.floor(Math.random() * allChars.length));",
+									"    }",
+									"",
+									"    // Перемешиваем пароль",
+									"    password = password.split('').sort(() => 0.5 - Math.random()).join('');",
+									"    return password;",
+									"}",
+									"",
+									"const randomUsername = generateUsername();",
+									"const randomPassword = generatePassword();",
+									"",
+									"pm.environment.set(\"randomUsername\", randomUsername);",
+									"pm.environment.set(\"randomPassword\", randomPassword);",
+									"",
+									"console.log(\"Generated randomUsername:\", randomUsername);",
+									"console.log(\"Generated randomPassword:\", randomPassword);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Получаем ответ как текст",
+									"const responseText = pm.response.text();",
+									"",
+									"// Ищем число ID в тексте (предположим, что ID — число)",
+									"const match = responseText.match(/\\b(\\d+)\\b/);",
+									"",
+									"if (match) {",
+									"    const userId = match[1];",
+									"    pm.environment.set(\"userId\", userId);",
+									"    pm.test(\"ID пользователя сохранён в переменную userId\", () => {",
+									"        pm.expect(userId).to.be.a(\"string\");",
+									"    });",
+									"} else {",
+									"    pm.test(\"ID пользователя не найден в ответе\", () => {",
+									"        pm.expect.fail(\"Не удалось извлечь ID пользователя из текста ответа\");",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{randomUsername}}\",\n  \"password\": \"{{randomPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Add user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": 0,\n  \"password\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 All User IDs and Logins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 User by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/:userId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 User by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/:userId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "200 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": a\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Add Product to Cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "500 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 0,\n  \"quantity\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Products in Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"cartItemId\", jsonData[0].cart_item_id);",
+									"",
+									"pm.test(\"cart_item_id сохранён в переменную cartItemId\", () => {",
+									"    pm.expect(jsonData[0]).to.have.property(\"cart_item_id\");",
+									"    pm.expect(jsonData[0].cart_item_id).to.be.a(\"number\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/getCart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"getCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Products in Cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/getCart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"getCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Update Cart Item Quantity",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": "{{cartItemId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Update Cart Item Quantity",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Update Cart Item Quantity",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Cart Item",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": "{{cartItemId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/cart/:cartItemId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart",
+								":cartItemId"
+							],
+							"variable": [
+								{
+									"key": "cartItemId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "200 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201 New Order from Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"orderId\", jsonData.orderId);",
+									"",
+									"pm.test(\"orderId сохранён в переменную\", () => {",
+									"    pm.expect(jsonData).to.have.property(\"orderId\");",
+									"    pm.expect(jsonData.orderId).to.be.a(\"number\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 New Order from Cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 All User Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user-orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user-orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 All User Orders",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user-orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user-orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Update Product Quantity in Order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								},
+								{
+									"key": "productId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Update Product Quantity in Order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "abc"
+								},
+								{
+									"key": "productId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Update Product Quantity in Order Copy",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "0"
+								},
+								{
+									"key": "productId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Update Total Sum of Orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/update-orders-total",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update-orders-total"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Update Total Sum of Orders",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/update-orders-total",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update-orders-total"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Product from order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								},
+								{
+									"key": "productId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Product from order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": ""
+								},
+								{
+									"key": "productId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 Product from order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/orders/:orderId/products/:productId",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders",
+								":orderId",
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": ""
+								},
+								{
+									"key": "productId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Get Paid Orders History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/orders-history",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"orders-history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Get Paid Orders History",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/orders-history",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"orders-history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "200 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201 New Order from Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"orderId\", jsonData.orderId);",
+									"",
+									"pm.test(\"orderId сохранён в переменную\", () => {",
+									"    pm.expect(jsonData).to.have.property(\"orderId\");",
+									"    pm.expect(jsonData.orderId).to.be.a(\"number\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Payment VISA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"card_type\": \"VISA\",\n  \"card_code\": \"9181347306820824\",\n  \"expiry_month\": 12,\n  \"expiry_year\": 26,\n  \"cvv\": \"123\",\n  \"email\": \"user@example.com\",\n  \"email_paypal\": \"user@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/pay",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 Payment VISA",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"card_type\": \"VISA\",\n  \"card_code\": \"8820354696467284\",\n  \"expiry_month\": 12,\n  \"expiry_year\": 26,\n  \"cvv\": \"123\",\n  \"email\": \"user@example.com\",\n  \"email_paypal\": \"user@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/pay",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Payment VISA",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"card_type\": \"VISA\",\n  \"card_code\": \"8820354696467284\",\n  \"expiry_month\": 12,\n  \"expiry_year\": 26,\n  \"cvv\": \"123\",\n  \"email\": \"user@example.com\",\n  \"email_paypal\": \"user@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/pay",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/cart",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201 New Order from Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"orderId\", jsonData.orderId);",
+									"",
+									"pm.test(\"orderId сохранён в переменную\", () => {",
+									"    pm.expect(jsonData).to.have.property(\"orderId\");",
+									"    pm.expect(jsonData.orderId).to.be.a(\"number\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/orders",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 Payment MasterCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"card_type\": \"MasterCard\",\n  \"card_code\": \"307328035514696\",\n  \"expiry_month\": 1,\n  \"expiry_year\": 20,\n  \"cvv\": \"101\",\n  \"email\": \"user@example.com\",\n  \"email_paypal\": \"user@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/pay",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Payment MasterCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"card_type\": \"MasterCard\",\n  \"card_code\": \"5248106661644884\",\n  \"expiry_month\": 12,\n  \"expiry_year\": 26,\n  \"cvv\": \"456\",\n  \"email\": \"user@example.com\",\n  \"email_paypal\": \"user@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/pay",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 Update balances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/updateBalances",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"updateBalances"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU2NiwiaWF0IjoxNzQ5MDU3NDc1LCJleHAiOjE3NTc2OTc0NzV9.iuYFBkUtzyV0KSs6NzW-zaCQCPCV9CKkPbnGNe2PFZs",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
